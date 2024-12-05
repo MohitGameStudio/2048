@@ -138,6 +138,7 @@ public class TileBoard : MonoBehaviour
 
         if (changed)
         {
+            GameManager.Instance.PlaySwipeSound(); // Play swipe sound here
             StartCoroutine(WaitForChanges());
         }
     }
