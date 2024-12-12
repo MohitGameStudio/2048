@@ -12,20 +12,27 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI hiscoreText;
 
+    [SerializeField] private AudioSource backgroundMusic; // Reference to the AudioSource for background music
+    [SerializeField] private AudioSource gameOverSound;   // Reference to the AudioSource for the game-over sound
+    [SerializeField] private AudioSource swipeSound;       // Reference to the AudioSource for the swipe sound
     public int score { get; private set; } = 0;
 
     private void Awake()
     {
-        if (Instance != null) {
+        if (Instance != null)
+        {
             DestroyImmediate(gameObject);
-        } else {
+        }
+        else
+        {
             Instance = this;
         }
     }
 
     private void OnDestroy()
     {
-        if (Instance == this) {
+        if (Instance == this)
+        {
             Instance = null;
         }
     }
@@ -37,19 +44,26 @@ public class GameManager : MonoBehaviour
 
     public void NewGame()
     {
-        // reset score
+        // Reset score
         SetScore(0);
         hiscoreText.text = LoadHiscore().ToString();
 
-        // hide game over screen
+        // Hide game-over screen
         gameOver.alpha = 0f;
         gameOver.interactable = false;
 
-        // update board state
+        // Update board state
         board.ClearBoard();
         board.CreateTile();
         board.CreateTile();
         board.enabled = true;
+
+        // Play background music
+        if (backgroundMusic != null)
+        {
+            backgroundMusic.loop = true; // Ensure it loops
+            backgroundMusic.Play();
+        }
     }
 
     public void GameOver()
@@ -58,6 +72,16 @@ public class GameManager : MonoBehaviour
         gameOver.interactable = true;
 
         StartCoroutine(Fade(gameOver, 1f, 1f));
+
+        // Stop background music and play the game-over sound
+        if (backgroundMusic != null)
+        {
+            backgroundMusic.Stop();
+        }
+        if (gameOverSound != null)
+        {
+            gameOverSound.Play();
+        }
     }
 
     private IEnumerator Fade(CanvasGroup canvasGroup, float to, float delay = 0f)
@@ -95,7 +119,8 @@ public class GameManager : MonoBehaviour
     {
         int hiscore = LoadHiscore();
 
-        if (score > hiscore) {
+        if (score > hiscore)
+        {
             PlayerPrefs.SetInt("hiscore", score);
         }
     }
@@ -104,5 +129,20 @@ public class GameManager : MonoBehaviour
     {
         return PlayerPrefs.GetInt("hiscore", 0);
     }
-
+    public void ResetHighScore()
+    {
+        PlayerPrefs.DeleteKey("hiscore");
+        hiscoreText.text = "0";
+    }
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+    public void PlaySwipeSound()
+    {
+        if (swipeSound != null)
+        {
+            swipeSound.Play();
+        }
+    }
 }
