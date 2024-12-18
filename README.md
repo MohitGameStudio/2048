@@ -29,7 +29,7 @@ The goal? Merge identical tiles to reach **2048**—but don’t stop there! Push
 ---
 
 ## 📬 **Contact**  
-Developed by **Mohit Game Studio** 🚀  
+Developed by **Mohit Kumar Singh** 🚀  
 - 📧 Email: [MohitGameStudio@gmail.com](mailto:MohitGameStudio@gmail.com)  
 - 🌐 Connect with me for more awesome projects!  
 
